@@ -1,3 +1,39 @@
+# Three Trios Game
+A Java based GUI application that allows for a card game played through player vs. player, AI vs. AI,
+or a combination of both.
+
+## Features ✨
+- Developed using the model-view-controller pattern using Java 📱
+- Utilized abstraction and object-oriented design patterns 🖥️
+  - Adapter pattern, Decorator pattern, Observer pattern, and Strategy pattern
+- Validated methods work as specified using mocks and JUnit tests 🧪
+
+## Game Instructions
+XYZ
+
+### Special Rules
+XYZ
+
+### Board Configuration File
+XYZ
+
+### Card Configuration File
+
+## Example
+XYZ
+
+## How to Run 🚀
+- Ensure you have JDK 11 or later installed.
+- Make sure JUnit 4 is available for testing
+
+1. git clone https://github.com/wong-bria/ThreeTrios.git
+2. Open the project in the IDE of your choice.
+3. Edit configurations and arguments. (Steps detailed in Arguments section)
+4. Click run with configurations.
+
+### Arguments
+XYZ
+
 Overview: This codebase is trying to solve the problem of implementing a custom card game called Three
 Trios with custom game rules and mechanics, turn-based gameplay, and game state management.
 Some high-level assumptions made in the codebase are that the user is familiar with grid-based
