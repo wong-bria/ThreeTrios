@@ -75,7 +75,7 @@ filled up.
   least 2 cards satisfy this condition. 
   - The reverse acts functionally the same as the non-reversed version.
 
-## Board Configuration File
+## <a name="boardconfig"></a>Board Configuration File
 - State the number of rows followed by the number of coloumns for the desired board.
 - Use C to represent a card cell.
 - Use X to represent a hole cell.
@@ -88,8 +88,9 @@ CCC<br>
 CCC<br>
 CCC<br>
 
-## Card Configuration File
+## <a name="cardconfig"></a>Card Configuration File
 - State the name of the card followed by the North, South, East, and West values.
+  - String int int int int
   - Values are numbers 1 through 10 (inclusive). 
 - Each card name must be unique.
 - If N = number of card cells on board, then there must be at least N + 1 cards in the card
@@ -111,7 +112,29 @@ card6 6 6 6 6<br>
 - Hints display the number of potential card flips on each cell based on the selected card.
 
 ## Example
-XYZ
+- Arguments: human human default<br>
+
+- Starting Screen:<br>
+![start_screen](images/starting_screen.png)
+<br>
+- Red places a card:<br>
+![red_place_card](images/red_places_card.png)
+<br>
+- Blue places a card and flips red:<br>
+![blue_flips_red](images/blue_flips_red.png "Blue places card with values 1, 2, 3, and 4. It flips the neighbor
+card from red to blue because the newly placed blue card has a West value of 4 which is greater than the
+neighboring red card's East value of  3.")
+<br>
+- Blue flips nothing:<br>
+![blue_flip_nothing](images/blue_places_card.png "Nothing is flipped after placing the blue card with values 
+1, 5, 1, and 1 because it has no neighboring cards with the opposite color (red).")
+<br>
+- Red flips multiple cards:<br>
+![red_flips_lots](images/red_flips_lots.png "The previous state was in the image showing "Blue flips nothing." 
+After red places the right most card, it flips the neighboring card to its West since the newly placed card's
+West value is 4 which is greater than the West neighbor's East value of 3. The neighbor then turns to red, and 
+it flips its West neighbor as well for the same reason, and the leftmost card is also flipped for the same reason.")
+<br>
 
 ## How to Run 🚀
 - Ensure you have JDK 11 or later installed.
@@ -119,10 +142,24 @@ XYZ
 
 1. git clone https://github.com/wong-bria/ThreeTrios.git
 2. Open the project in the IDE of your choice.
-3. Edit configurations and arguments. (Steps detailed in Arguments section)
-4. Click run with configurations.
+3. Edit configurations and arguments. (Steps detailed in [Arguments Section](#arguments))
+4. (Optional) Create your own board configurations (Steps detailed in [Board Configuration File](#boardconfig))
+  - After you have created your board configuration file and placed it in the BoardConfig folder,
+    replace 'HoleAndCardCellBoard' with the name of your file from the line 
+    'ReadGridConfig readGrid = new ReadGridConfig("BoardConfig/HoleAndCardCellBoard");'
+    in the ThreeTrios.java class.
+5. (Optional) Create your own card configurations (Steps detailed in [Card Configuration File](#cardconfig))
+  - After you have created your own card configuration file and placed it in the CardConfig folder,
+    replace 'ForPlus' with the name of your file from the line
+    'ReadCardConfig readCard = new ReadCardConfig("CardConfig/ForPlus");' in the ThreeTrios.java class.
+6. Click run with configurations.
 
-### Arguments
+- After clicking run, two windows will appear on top of each other, so you must drag the windows apart
+for both players to see the board. 
+- The window that appears on top of the other is player 2's window, and the window below is player 1's window.
+
+
+## <a name="arguments"></a>Arguments
 - X Y [[A] B]
   - Where X and Y are either "human", "strategy1", "strategy2", "strategy3", or "strategy4"
     (all without the quotes).
@@ -146,47 +183,10 @@ The grid a player plays on is 0 index based where the origin starts at (0, 0) in
 and as row increases it moves downward on the grid, and as column increases, it moves right on the grid.
 The hands are a list where cards slide left when used.
 
-### Quick start:
-@Test
-  public void QuickStartToUseCodebase() {
-    // initialize a model
-    ThreeTrioModel model = new ThreeTrioModel();
-    // start the game with a board configuration file to be the grid played on
-    // alongside a card configuration file to be the cards used in the game.
-    model.startGame("BoardConfig" + File.separator + "HoleAndCardCellBoard",
-            "CardConfig" + File.separator + "EnoughForAnyBoards");
-    // initialize a view, taking in a model and Appendable, to display the game
-    ThreeTrioGameView view = new ThreeTrioGameTextView(model, new StringBuilder());
-
-    // allow player1 to play a card from their hand onto a (row,col) on the board
-    model.playCard(0, 0, 2);
-    // have the card battle neighboring card to the north, south, east, west
-    model.battle();
-    // allow player2 to play a card
-    model.playCard(11, 0, 3);
-    model.battle();
-
-    // how a working game can look
-    String expected = "Player: RED\n"
-            + "__BB \n"
-            + "     \n"
-            + "     \n"
-            + "     \n"
-            + "     \n"
-            + "Hand:\n"
-            + "card3 1 2 3 4\n"
-            + "card5 1 2 3 4\n"
-            + "card7 1 2 3 4\n"
-            + "card9 1 2 3 4\n"
-            + "card11 1 2 3 4\n"
-            + "card13 1 2 3 4\n"
-            + "card15 1 2 3 4\n"
-            + "card17 1 2 3 4\n"
-            + "card19 1 2 3 4\n"
-            + "card21 1 2 3 4\n"
-            + "card23 1 2 3 4";
-    Assert.assertEquals(expected, view.toString());
-  }
+## Additional Information
+I worked in this project with a peer, David Liu.
+Code provided to us to practice the Adapter pattern is in the provider folder,
+which was given to us by Mateo Biggs and Ayush Adhikari.
 
 ### Key components:
 Some key components are the file readers, model, and view, and controller.
@@ -196,7 +196,7 @@ system. It will handle interactions between the model, view, and user input/outp
 controls the flow of the game by processing commands, updating game states, and creating outputs
 to be displayed.
 
-The file readers are driven by the model because they are called in the model's
+The file readers are driven by the controller because they are called in the controller's
 startGame to create a list of cards and a grid of cells to be used in the game respectively.
 
 The model is driven by the controller since the controller responds to user inputs and makes
@@ -208,42 +208,18 @@ reflect the changes and match the game state in the model.
 
 ### Key subcomponents:
 In file readers, key subcomponents: ReadCardConfig and ReadGridConfig.
-    - ReadCardConfig: the main noun is card. It exists to read
-      a card configuration file given by the user. It is used to create a list of cards to be played in
-      the game.
-    - ReadGridConfig: the main noun is grid. It exists to read a grid configuration file given by the user.
-      It is used to create a list of list of cells.
+    - ReadCardConfig: It exists to read a card configuration file given by the user, and is
+      used to create a list of cards to be played in the game (the deck/each players' hand).
+    - ReadGridConfig: It exists to read a grid configuration file given by the user, and
+      is used to create a list of list of cells (the board).
 
 In view, key subcomponent: ThreeTrioGameView.
-    - ThreeTrioGameView: the main noun is game view. It exists and is used to display the current
-      game state of a game of Three Trios.
+    - ThreeTrioGameView: It exists and is used to display the current game state
+      of a game of Three Trios.
 
-In model, key subcomponent: Player, Cells, and Card.
-    - Player: the main nouns are hand and color. It exists to represent a player playing a game of
-      Three Trios. It is used to hold a list of cards and a color to represent which cards
-      on a board belongs to them.
-    - Cells: the main nouns are card and neighbors. It exists to represent either a card cell or hole cell.
-      Cells are used to build a grid that the user will play on where if a cell is a hole cell, a user can't
-      play a card on it, but if it's a card cell, then a user can play a card on it.
-    - Card: the main nouns are name, color, and attack value. It exists to represent a card that holds
-      information such as its name, color, and attack value in its north, south, east, and west directions.
+In model, key subcomponent: Cells, and Card.
+    - Cells: It exists to represent either a card cell or hole cell, and are used to
+      build a grid that the user will play on.
+    - Card: It exists to represent a card that holds information such as its name,
+      color, and attack value in its north, south, east, and west directions.
       It is used to be played on a grid for a user to try and win a game of Three Trios.
-
-
-### Source organization:
-    - The file readers component can be found by opening the hw5 folder, then the src folder, and
-      finally the filereaders folder.
-    - The model component can be found by opening the hw5 folder, then the src folder, and
-      finally the model folder.
-    - The view component can be found by opening the hw5 folder, then the src folder, and finally
-      the view folder.
-
-Each of these components will also contain their key subcomponents inside of their respective
-folders.
-
-We decided to put ReadCardConfig and ReadGridConfig in a filereaders package because they
-are focused on configuration and not directly modifying or maintaining game states,
-handling user inputs, or displaying a view, thus it wouldn't be part of the model, controller,
- or view package but its own package instead.
-
- A card is in the format: String int int int int , or Name northValue southValue eastValue westValue
