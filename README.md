@@ -54,7 +54,7 @@ XYZ
 - X Y [[A] B]
   - Where X and Y are either "human", "strategy1", "strategy2", "strategy3", or "strategy4"
     (all without the quotes).
-    - Refer to [link](#strat) Section for details on each strategy.
+    - Refer to [AI Strategies](#strat) Section for details on each strategy.
   - X represents Player 1 and Y represents Player2.
   - "human" represents a human playing, such as yourself.
   - "strategy1", "strategy2", "strategy3", and "strategy4" represents an AI playing
@@ -67,7 +67,7 @@ XYZ
       - If Flip Greatear Rule, Reverse Rule, or Fallen Ace Rule aren't used, then Flip Greater 
         Rule will be applied.
       - If arguments A and B are both not given, then Flip Greater Rule will be used.
-    - Refer to [link](#cardRules) Section for details on each card rule. 
+    - Refer to [Card Flipping Rules](#cardRules) Section for details on each card rule. 
 
 ## Codebase Information
 The grid a player plays on is 0 index based where the origin starts at (0, 0) in the top left,
