@@ -20,7 +20,7 @@ filled up.
   can place their cards on.
 - If a cell on the board already has a card, then no one can place a card on that cell.
 
-### <a name="strat"></a> AI Strategies
+## <a name="strat"></a> AI Strategies
 - Strategy 1 (Corner Strategy): A strategy where the corners of the grid are selected first
   if they are legal moves. Also, consider which card is the hardest to flip in that corner.
   - Hardest to flip: Sum each card's value that would be adjacent to empty card cells.
@@ -44,10 +44,10 @@ filled up.
     get as a result of the location and card we picked. The location and card index we pick
     that will result in the fewest amount of flips for the opponent will chosen.
 
-### Card Values
+## Card Values
 A card's direction values can either be 2, 3, 4, 5, 6, 7, 8, 9, or A (10)
 
-### <a name="cardRules"></a>Card Flipping Rules
+## <a name="cardRules"></a>Card Flipping Rules
 - All rules will compare the newly placed card with neighboring cards with opposing colors.
   - The newly placed card will compare its North Value to North neighbor's South Value.
   - The newly placed card will compare its South Value to North neighbor's North Value.
@@ -75,10 +75,40 @@ A card's direction values can either be 2, 3, 4, 5, 6, 7, 8, 9, or A (10)
   least 2 cards satisfy this condition. 
   - The reverse acts functionally the same as the non-reversed version.
 
-### Board Configuration File
-XYZ
+## Board Configuration File
+- State the number of rows followed by the number of coloumns for the desired board.
+- Use C to represent a card cell.
+- Use X to represent a hole cell.
+- There must be an odd number of card cells.
 
-### Card Configuration File
+### Board Configuration File Example
+A 3 x 3 grid with only card cells may be a file with these contents:
+3 3
+CCC
+CCC
+CCC
+
+## Card Configuration File
+- State the name of the card followed by the North, South, East, and West values.
+  - Values are numbers 1 through 10 (inclusive). 
+- Each card name must be unique.
+- If N = number of card cells on board, then there must be at least N + 1 cards in the card
+  configuration file to start a game.
+
+### Card Configuration File Example
+A deck of 6 cards may be a file with these contents:
+card1 1 1 1 1
+card2 2 2 2 2
+card3 3 3 3 3
+card4 4 4 4 4
+card5 5 5 5 5
+card6 6 6 6 6
+
+## Toggle Hint Mode
+- For hints to be toggled between on and off, player one would click 'q' and
+  player two would click 'w'. For the hints to appear, the user must toggle hints on,
+  then click on a card in their hand.
+- Hints display the number of potential card flips on each cell based on the selected card.
 
 ## Example
 XYZ
@@ -217,9 +247,3 @@ handling user inputs, or displaying a view, thus it wouldn't be part of the mode
  or view package but its own package instead.
 
  A card is in the format: String int int int int , or Name northValue southValue eastValue westValue
-
-*** Assignment 9 ***
-    - We added a new feature that decorated the grid and allowed a user to toggle
-      between having hints turned on or off. For hints to be toggled between
-      on and off, player one would click 'q' and player two would click 'w'. For the hints to appear,
-      the user must toggle hints on, then click on a card in their hand.
