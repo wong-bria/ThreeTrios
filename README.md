@@ -21,10 +21,28 @@ filled up.
 - If a cell on the board already has a card, then no one can place a card on that cell.
 
 ### <a name="strat"></a> AI Strategies
-- Strategy 1:
-- Strategy 2:
-- Strategy 3:
-- Strategy 4:
+- Strategy 1 (Corner Strategy): A strategy where the corners of the grid are selected first
+  if they are legal moves. Also, consider which card is the hardest to flip in that corner.
+  - Hardest to flip: Sum each card's value that would be adjacent to empty card cells.
+    The card with the greatest sum and the corresponding corner are then selected.
+  - If no corner available, select uppermost, leftmost available position with card index 0
+    (uppermost card in the player's hand as displayed in the GUI).
+- Strategy 2 (Flip Most Cards Strategy): A strategy attempting to flip the most cards
+  possible in one turn. 
+  - If no flips are possible (most flip of 0), then select the uppermost, leftmost open
+    position with card index 0. 
+- Strategy 3 (Least Exposed Strategy): A strategy where cells that are the least exposed
+  are chosen. 
+  - For every direction of a card on a cell, count how much cards
+    in the opponent's hand can flip the card in that direction. Get the sum and find the
+    coordinate of the cell and hand index of the card with the lowest sum.
+- Strategy 4 (Min Max Strategy): A strategy that attempts to minimize the effect of the
+  opponent's next move.
+  - Tries every possible location with every card then guesses the opponent's strategy.
+  - Once opponent's strategy is guessed, simulate where the opponent would play next
+    based on where this AI would play, and calculate the amount of flips the opponent would
+    get as a result of the location and card we picked. The location and card index we pick
+    that will result in the fewest amount of flips for the opponent will chosen.
 
 ### <a name="cardRules"></a>Card Flipping Rules
 - Flip Greater Rule:
