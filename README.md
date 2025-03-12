@@ -9,10 +9,29 @@ or a combination of both.
 - Validated methods work as specified using mocks and JUnit tests 🧪
 
 ## Game Instructions
-XYZ
+- The goal of this card game is to own the most cards by the time the board is completely
+filled up.
+  - To count the amount of cards a player owns, add up the amount of cards with the player's
+    color on the board and in their hand.
+- Player 1 has the Red color and goes first. Player 2 has the Blue color and goes second.
+- There are card cells on the board represented by the yellow squares, which are cells the players
+  are able to place their cards on.
+- There are hole cells on the board represented by gray squares, which are cells neither players
+  can place their cards on.
+- If a cell on the board already has a card, then no one can place a card on that cell.
 
-### Special Rules
-XYZ
+### <a name="strat"></a> AI Strategies
+- Strategy 1:
+- Strategy 2:
+- Strategy 3:
+- Strategy 4:
+
+### <a name="cardRules"></a>Card Flipping Rules
+- Flip Greater Rule:
+- Reverse Rule:
+- Fallen Ace Rule:
+- Same Rule:
+- Plus Rule:
 
 ### Board Configuration File
 XYZ
@@ -32,18 +51,30 @@ XYZ
 4. Click run with configurations.
 
 ### Arguments
-XYZ
+- X Y [[A] B]
+  - Where X and Y are either "human", "strategy1", "strategy2", "strategy3", or "strategy4"
+    (all without the quotes).
+    - Refer to [link](#strat) Section for details on each strategy.
+  - X represents Player 1 and Y represents Player2.
+  - "human" represents a human playing, such as yourself.
+  - "strategy1", "strategy2", "strategy3", and "strategy4" represents an AI playing
+  - The square brackets, [], means that the arguments inside are optional and these arguments
+    represents the card flipping rules that will be applied.
+    - Arguments A, B can either be "default" (without the quotes) or empty string, "", which will
+      both use the Flip Greater Rule, "reverse" to use the Reverse Rule, "fallen-ace" to use the 
+      Fall Ace Rule, "same" to use the Same Rule, or "plus" to use the Plus Rule (all without the quotes)
+      - Rules Flip Greataer Rule and Reverse cannot be used together as they contradict each other.
+      - If Flip Greatear Rule, Reverse Rule, or Fallen Ace Rule aren't used, then Flip Greater 
+        Rule will be applied.
+      - If arguments A and B are both not given, then Flip Greater Rule will be used.
+    - Refer to [link](#cardRules) Section for details on each card rule. 
 
-Overview: This codebase is trying to solve the problem of implementing a custom card game called Three
-Trios with custom game rules and mechanics, turn-based gameplay, and game state management.
-Some high-level assumptions made in the codebase are that the user is familiar with grid-based
-systems and basic list operations. More specifically, the grid a player plays on
-is 0 index based where the origin starts at (0,0) in the top left, as row increases it moves
-downward on the grid, and as column increases it moves right on the grid. Also, hands are a list
-where when cards slide down left when used. Both these high-level assumptions are require
-background knowledge but are documented in comments as reminders.
+## Codebase Information
+The grid a player plays on is 0 index based where the origin starts at (0, 0) in the top left,
+and as row increases it moves downward on the grid, and as column increases, it moves right on the grid.
+The hands are a list where cards slide left when used.
 
-Quick start:
+### Quick start:
 @Test
   public void QuickStartToUseCodebase() {
     // initialize a model
@@ -85,25 +116,25 @@ Quick start:
     Assert.assertEquals(expected, view.toString());
   }
 
-
-
-Key components:
+### Key components:
 Some key components are the file readers, model, and view, and controller.
 
-The controller isn't implemented yet but is the component that will drive the control-flow of our
+The controller is the component that will drive the control-flow of our
 system. It will handle interactions between the model, view, and user input/output. It also
 controls the flow of the game by processing commands, updating game states, and creating outputs
 to be displayed.
 
 The file readers are driven by the model because they are called in the model's
 startGame to create a list of cards and a grid of cells to be used in the game respectively.
+
 The model is driven by the controller since the controller responds to user inputs and makes
 requests to the model to either update game states or retrieve data. The model also drives
 because when a game state changes, the model notifies the view to update the display.
+
 The view is driven by the model because when the model changes, the view will update itself to
 reflect the changes and match the game state in the model.
 
-Key subcomponents:
+### Key subcomponents:
 In file readers, key subcomponents: ReadCardConfig and ReadGridConfig.
     - ReadCardConfig: the main noun is card. It exists to read
       a card configuration file given by the user. It is used to create a list of cards to be played in
@@ -127,7 +158,7 @@ In model, key subcomponent: Player, Cells, and Card.
       It is used to be played on a grid for a user to try and win a game of Three Trios.
 
 
-Source organization:
+### Source organization:
     - The file readers component can be found by opening the hw5 folder, then the src folder, and
       finally the filereaders folder.
     - The model component can be found by opening the hw5 folder, then the src folder, and
@@ -144,74 +175,6 @@ handling user inputs, or displaying a view, thus it wouldn't be part of the mode
  or view package but its own package instead.
 
  A card is in the format: String int int int int , or Name northValue southValue eastValue westValue
-
-Invariant inside of ThreeTrioModel:
-    - Invariant: this.turn is always within the index bounds of the number of players. (0 or 1).
-
- *** Changes for part 2 ***
-
- In our model, we changed "this.grid.addAll(new ReadGridConfig(gridFile).parseGrid());"
- and "this.deck.addAll(new ReadCardConfig(cardFile).parseCards());" to
- "this.grid = new ArrayList<>(new ReadGridConfig(gridFile).parseGrid());" and
- "this.deck = new ArrayList<>(new ReadCardConfig(cardFile).parseCards());" because it makes it more
- clear that we are creating a copy of the given grid and cards.
-
-We also added the observations: getScore, getFlipCount, checkLegal, getCardOwner, getPlayerHand,
-getContentAtCell, getGridLength, and getGridWidth.
-    - getScore: This ability to observe a player's score in a game was missing because we didn't
-    think anyone needed to see the score except for the model to update its game state after
-    a battle to determine which player won. Thus, we had a private helper named determineWinner
-    which similar to getScore except it calculates the score of both players and uses the
-    results to determine a winner instead of only getting a score for a given player.
-    We chose to add getScore to add this missing functionality by taking in an index,
-    0 index based, to represent the player we are finding the score for, then
-    having a local variable that is set to the amount of cards in the interested player
-    which is also incremented for every card on the board that has the same color as
-    the player we are interested in.
-    - getFlipCount: This ability to check how many cards a player can flip by playing a card at
-     a given coordinate was missing because we think of this ability. We added this missing
-     functionality by getting the cell the player getting a copy of grid, putting
-     the specified card from the specified player onto the copy of the grid, getting a cell
-     based on given coordinate, and returning the result of a private helper that takes in that
-     cell. The private helper has a local variable to keep count of flips that is initialized to 0.
-     It then looks at all its neighbors then flips the neighboring cards
-     that are the opposite color with a lower attack value and increments the variable flips by one,
-     and continues at the card that was just flipped.
-    - checkLegal: This ability to observe if it was legal for the current player to play at a
-     given coordinate was missing because we made the decision to throw an exception if
-     the current player tries to play at a coordinate that is not legal and to just put
-     the card onto a the grid at the given coordinate if it is legal, thus the player
-     wouldn't need to see if their move is legal or not. We decided to add this missing
-     functionality by checking if the given coordinate is in the grid, is not going to be
-     on a hole cell, and is not going to be on a card cell that already has a card on it.
-    - getCardOwner: This ability to check which player owns a card in a cell at a given
-    coordinate was missing because we never needed to check the owner a card at a random
-    location. When we did check the owner of a card on the grid, we would check every single
-    cell on the grid with nested for each loops and then check the color of the card
-    at a cell to determine the owner. We added this missing functionality by checking if
-    the given cell has a card. If it does, then get the card's color to determine the owner.
-    - getPlayerHand: This ability to check what the contents of a player’s hand was missing
-    because we thought it was only necessary to check the contents of the current player's hand.
-    We added this missing functionality by returning the hand of the specified player based
-    on given player index.
-    - getContentAtCell: This ability to check what the contents of a cell at a given coordinate
-    was missing because we forgot we could abstract this ability to a method. We implemented this
-    missing functionality by returning Optional.empty() if a cell has nothing in it. Otherwise,
-    return Optional.of(X) where X is a card in the cell at a given coordinate.
-    - getGridLength: This ability to check how big the grid is in terms of length was missing
-    because we didn't think of much situations that required this ability. We added this missing
-    functionality by checking the size of the grid.
-    - getGridWidth: This ability to check how big the grid is in terms of width was missing
-    because we didn't think of much situations that required this ability. We added this missing
-    functionality by checking the size of the first row in the grid.
-
-    In our card interface, instead of using four separate methods to return the four different
-    attack values, we replaced them with a method that takes in a direction and returns the
-    attack value at that direction.
-
-    For the cell interface, we also added copyOf method to create a copy of a cell. We did this
-    because in ThreeTrioModel, we changed our getGrid to use for each loops, which required
-    creating a copy of a cell, instead of just passing in the model's grid into a new array.
 
 *** New Classes for Hw6 ***
     - ThreeTrios: Can be found inside the src folder. This class is currently used as a palceholder
@@ -254,91 +217,15 @@ getContentAtCell, getGridLength, and getGridWidth.
         - ThreeTrioController: The controller takes in the file name for a board and deck
         of card to be parsed and passed to the model.
 
-*** Changes for Part 3 ***
-    - Added a new ModelFeatures interface and implementation
-        - This interface serves as an expansion of ThreeTrioModel, where it pings
-          listeners (controllers) of updates as they occur.
-        - The implementation is an extension of the original model, since this is
-          an enhanced ThreeTrioModel that more easily supports controllers.
-    - Changed access modifier of GameState field and GameState enum in ThreeTrioModel
-        - Since our new interfaces needs to know the state of the game when it's over
-          (figure out who won) we changed the state from private to protected.
-    - Changed return type of getTurn() from Colors to int in ReadOnlyThreeTrio...
-        - Makes it significantly easier to determine which controller's turn it is and
-          another method (getPlayerColor) accommodates the loss of the original return type.
-    - Refactored our previous Player interface and HumanPlayer implementation to ModelPlayer
-        - Our interface and implementation represented the state a player is in rather than
-          an actual player. By this, we mean that a player strictly represented a color and
-          a deck. We figured this would be more adjacent to a "Model representation" of a
-          player, and have renamed it as such.
-    - Added a new PlayerActions interface
-        - This interface represents an action a player can take (i.e. select a card and tile).
-          It includes a method that identifies whether or not the player partaking in the action
-          is a Human or Machine. Although this method can be removed, it serves to simplify the
-          logic in the controller by excluding instanceOf.
-        - Added a new class HumanPlayer (implements PlayerActions)
-            - Currently, since a HumanPlayer relies on the view to interact with the controller,
-              a HumanPlayer object will throw an UnsupportedOperationException on calls to
-              playCard.
-        - Added a new class MachinePlayer (implements PlayerActions)
-            - Calls to playCard cause the machine player to cook up a position and card to play
-              on the board. Since a machine player doesn't rely on a view, it relies on conveying
-              the information of card selection and placement via this interface.
-    - Added a new ModelNotificationListener interface and implementation
-        - Purpose is to notify the controller of events that occur in the model:
-            - notifyGameStateUpdated() notifies the controllers of when to update the view
-            - notifyPlayerTurn() notifies the controllers of whose turn it is
-            - notifyInvalidMove() notifies the controllers to attempt another play when selecting
-              an invalid position.
-            - notifyGameOver() notifies the controllers to stop implementing inputs and outputs
-              that would modify the game state.
-    - Added a new Controller interface and class (ThreeTrioGameController(Impl))
-        - Controller class derives methods from ModelNotificationListener and Features, as it is
-          a model notification listener and a view listener.
-        - Controller class alters the model's game state by taking in Human input via the model
-          and machine input via the output of a strategy.
-        - Controller class relies on a Model, PlayerAction, and View.
-    - Moved old controller to old.controller
-        - Primarily used for model instantiation without having to deal with
-          ReadGridConfig/ReadCardConfig
-    - Added displayErrMsg() and displayWinMsg() to the ThreeTrioGameView interface
-        - Decouples the view from the controller, where our controller no longer
-          creates a new JOptionPlane for displaying errors or win messages. Instead, delegates
-          the display functions to the view.
-        - Purpose behind having two methods is the difference in display, where our JFrameView
-          creates an ERROR_MESSAGE JOptionPlane for errors and a PLAIN_MESSAGE JOptionPlane for
-          win messages.
-    - Overhauled the constructors and method calls in JFrameView, GridPanel, and PlayerHandPanel
-        - JFrameViews can now be instantiated without error when a model has not already started
-        - JFrameView, GridPanel, and PlayerHandPanel update renders upon request
-            - JFrameView does this via the render() method
-            - GridPanel does this via the updateCells() method
-            - PlayerHandPanel does this via the updatePanel() method.
-        - Removed toggleHighlight() from JFrameView
-            - This was predominantly a PlayerHandPanel feature, but was added for testing prior.
-        - Parameterized JFrameView and PlayerHandPanel to support all classes extending model.Card
-    - Added clearSelectedCard() in Features
-        - Serves its purpose by telling the listener (controller) to clear the card its
-          currently holding when the card is de-selected.
-
 *** Assignment 8 ***
     - Make sure to clearly document your new command-line options in your README,
       so graders know how to run your game.
       Our command-line options are: X Y
       where X and Y can be human, strategy1, strategy2, strategy3, or strategy4
 
-    - Which features of the provided views you were able to get working,
-     and which ones you were not:
-     The only features of the provided view that we had to get working were in the provider's
-     PlayerActionFeatures interface. In that interface, it had three methods and we were
-     able to get all three working properly.
-
 *** Assignment 9 ***
-    - WHAT FEATURES WE ADDED AND WHAT FILES WERE AFFECTED?
-        - We added all the extra credit features
-    - For level 0, we added a new feature that decorated the grid and allowed a user to toggle
-      between having hints turned on or off. The files that were affected include
-      ThreeTrioPlayerControllerImpl, JFrameView, and GameGridPanel. For hints to be toggled between
+    - We added a new feature that decorated the grid and allowed a user to toggle
+      between having hints turned on or off. For hints to be toggled between
       on and off, player one would click 'q' and player two would click 'w'. For the hints to appear,
       the user must toggle hints on, then click on a card in their hand.
     - Added new rules to the game under model.ruled
@@ -367,14 +254,3 @@ getContentAtCell, getGridLength, and getGridWidth.
         - SameRule implements a new rule where cards with the same opposing values as
           the card played are flip IFF at least 2 cards satisfy this condition. The reverse
           acts functionally the same as the non-reversed version.
-    - Added new RuledThreeTrioModel, which works nearly identically to ThreeTrioModel.
-        - Rather than update and possibly break our existing ThreeTrioModel, we extended our existing
-          implementation and added the new rule functionality to the implementation. This allows for the
-          models to co-exist without having to reimplement all the methods.
-    - Changed UpdatedThreeTrioModel to become a wrapper.
-        - Rather than add a whole new model for controller support (to support our new ruled model), we made
-          our UpdatedThreeTrioModel a wrapper. It now uses composition, taking in an existing model and
-          delegating all functions to that model. We kept both constructors to allow for previous
-          implementations to co-exist with current implementations.
-
-    - removed tests in package called old, strategy because we have over 125 files
