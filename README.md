@@ -123,12 +123,14 @@ card6 6 6 6 6<br>
 - Blue places a card and flips red:<br>
 Blue places card with values 1, 2, 3, and 4. It flips the neighbor
 card from red to blue because the newly placed blue card has a West value of 4 which is greater than the
-neighboring red card's East value of  3.
+neighboring red card's East value of 3.
+
 ![blue_flips_red](images/blue_flips_red.png)
 
 - Blue flips nothing:<br>
 Nothing is flipped after placing the blue card with values 
 1, 5, 1, and 1 because it has no neighboring cards with the opposite color (red).
+
 ![blue_flip_nothing](images/blue_places_card.png)
 
 - Red flips multiple cards:<br>
@@ -136,6 +138,7 @@ The previous state was in the image showing "Blue flips nothing."
 After red places the right most card, it flips the neighboring card to its West since the newly placed card's
 West value is 4 which is greater than the West neighbor's East value of 3. The neighbor then turns to red, and 
 it flips its West neighbor as well for the same reason, and the leftmost card is also flipped for the same reason.
+
 ![red_flips_lots](images/red_flips_lots.png)
 
 
