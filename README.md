@@ -45,7 +45,7 @@ filled up.
     that will result in the fewest amount of flips for the opponent will chosen.
 
 ## Card Values
-A card's direction values can either be 2, 3, 4, 5, 6, 7, 8, 9, or A (10)
+- A card's direction values can either be 2, 3, 4, 5, 6, 7, 8, 9, or A (10)
 
 ## <a name="cardRules"></a>Card Flipping Rules
 - All rules will compare the newly placed card with neighboring cards with opposing colors.
@@ -82,11 +82,11 @@ A card's direction values can either be 2, 3, 4, 5, 6, 7, 8, 9, or A (10)
 - There must be an odd number of card cells.
 
 ### Board Configuration File Example
-A 3 x 3 grid with only card cells may be a file with these contents:
-3 3
-CCC
-CCC
-CCC
+A 3 x 3 grid with only card cells may be a file with these contents:<br>
+3 3<br>
+CCC<br>
+CCC<br>
+CCC<br>
 
 ## Card Configuration File
 - State the name of the card followed by the North, South, East, and West values.
@@ -96,13 +96,13 @@ CCC
   configuration file to start a game.
 
 ### Card Configuration File Example
-A deck of 6 cards may be a file with these contents:
-card1 1 1 1 1
-card2 2 2 2 2
-card3 3 3 3 3
-card4 4 4 4 4
-card5 5 5 5 5
-card6 6 6 6 6
+A deck of 6 cards may be a file with these contents:<br>
+card1 1 1 1 1<br>
+card2 2 2 2 2<br>
+card3 3 3 3 3<br>
+card4 4 4 4 4<br>
+card5 5 5 5 5<br>
+card6 6 6 6 6<br>
 
 ## Toggle Hint Mode
 - For hints to be toggled between on and off, player one would click 'q' and
