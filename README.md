@@ -44,12 +44,36 @@ filled up.
     get as a result of the location and card we picked. The location and card index we pick
     that will result in the fewest amount of flips for the opponent will chosen.
 
+### Card Values
+A card's direction values can either be 2, 3, 4, 5, 6, 7, 8, 9, or A (10)
+
 ### <a name="cardRules"></a>Card Flipping Rules
-- Flip Greater Rule:
-- Reverse Rule:
-- Fallen Ace Rule:
-- Same Rule:
-- Plus Rule:
+- All rules will compare the newly placed card with neighboring cards with opposing colors.
+  - The newly placed card will compare its North Value to North neighbor's South Value.
+  - The newly placed card will compare its South Value to North neighbor's North Value.
+  - The newly placed card will compare its East Value to North neighbor's West Value.
+  - The newly placed card will compare its West Value to North neighbor's East Value.
+
+- Flip Greater Rule: Cards are flipped if and only if the newly placed card has an opposing
+  color than its neighbor and a value greater than its neighbor's value.
+  - Ex: Newly placed red card's North value is 8, neighbor's blue card South value is 3,
+    and newly placed card is directly below neighbor, then flip neighbor blue card's color to red. 
+
+- Reverse Rule: Cards are flipped if and only if the newly placed card has an opposing color
+  than its neighbor and a value less than its neighbor's value.
+
+- Fallen Ace Rule: Newly placed cards with greater opposing values overtake cards AND
+  1 overtakes Ace. 
+  - The reverse is also true (if applied), where newly placed cards with
+    smaller opposing values overtake cards AND Ace overtakes 1.
+
+- Plus Rule: Cards are flipped if at least two opposing pairs of adjacent cards have the same sum
+  with the current card in their respective opposing directions. 
+  - Reversing this rule does nothing.
+
+- Same Rule: Cards with the same opposing values as the card played are flip if and only if at
+  least 2 cards satisfy this condition. 
+  - The reverse acts functionally the same as the non-reversed version.
 
 ### Board Configuration File
 XYZ
@@ -194,81 +218,8 @@ handling user inputs, or displaying a view, thus it wouldn't be part of the mode
 
  A card is in the format: String int int int int , or Name northValue southValue eastValue westValue
 
-*** New Classes for Hw6 ***
-    - ThreeTrios: Can be found inside the src folder. This class is currently used as a palceholder
-    to run our view so we are able to see a visual representation of a Three Trio game.
-
-    - Inside of strategy package:
-        - Coordinate: The main noun is coordinate. It exists to represents a coordinate which
-         contains a row and col in a grid. It is used to represent a location on a grid
-         that a strategy should return.
-        - CornerStrategy: A strategy that someone can use that prioritizes the placement of
-        cards on corners. If no corners are available, place card from hand at index 0 at
-        the uppermost, leftmost available cell.
-        - FlipMostCardsStrategy: A strategy that someone can use that prioritizes the placement
-        of cards on cells that will flip the most cards. If no flips are possible
-        (a flip count of 0), place card from hand at index 0 at the uppermost, leftmost
-        available cell.
-        - LeastExposedStrategy: A strategy that someone can use that prioritizes the placement of
-        cards on cells that expose the least amount directions of a card with the card that
-        is hardest to flip. Best moves are returned in a list.
-        - MinMaxStrategy: A strategy that someone can use that prioritizes the placement of
-        cards on cells that minimizes the maximum flips an opponent can get the next turn.
-        Best moves are returned in a list.
-        - Tuple: Used to represent a tuple data type, which stores keys with corresponding
-        values.
-
-    - Inside of view package:
-        - CardToJButton: The main noun is button. It exists to represent a card as a button.
-        It is used to represent a card in a player's hand as as button which will allow
-        users to interact with the cards in a hand.
-        - GameGridPanel: The main noun is grid. It exists to represent a grid. It is used to
-        represent a grid which users can interact with.
-        - JFrameView: The main noun is frame. It exists to represent a frame containing
-        two player hand panels and a grid. It is used to represent a frame containing
-        all the information a player would see when playing a Three Trio game.
-        - PlayerHandPanel: The main noun is hand. It exists to represent a panel
-        which will be a player's hand. It is used to represent a player's hand containing
-        cards.
-
-    - Inside of controller package:
-        - ThreeTrioController: The controller takes in the file name for a board and deck
-        of card to be parsed and passed to the model.
-
-*** Assignment 8 ***
-    - Make sure to clearly document your new command-line options in your README,
-      so graders know how to run your game.
-      Our command-line options are: X Y
-      where X and Y can be human, strategy1, strategy2, strategy3, or strategy4
-
 *** Assignment 9 ***
     - We added a new feature that decorated the grid and allowed a user to toggle
       between having hints turned on or off. For hints to be toggled between
       on and off, player one would click 'q' and player two would click 'w'. For the hints to appear,
       the user must toggle hints on, then click on a card in their hand.
-    - Added new rules to the game under model.ruled
-        - The rule implementations follow the ThreeTrioRule interface, which has the following methods:
-            - SatisfiesFlip: Returns true if the Cell, Neighboring Cell, and Direction to Neighbor satisfy
-              the rule's flip condition.
-            - ReverseSatisfiesFlip: Returns true if the intended inverse effect is reached. Some rules like
-              FallenAce would accept nearly all plays as flips if we simply take the inverse of the
-              output of SatisfiesFlip, so this method serves to differentiate the intended functions.
-            - IsMutuallyExclusive: Returns true if the given rule and the current rule are mutually exclusive.
-            - allowCombo: Returns true if this rule can be applied after combos (i.e. to battle after placed card).
-        - FallenAceRule implements the Regular rule and Fallen Ace, where newly placed cards
-          with greater opposing values overtake cards AND 1 overtakes Ace. The reverse is also
-          true, where newly placed cards with smaller opposing values overtake cards AND Ace
-          overtakes 1.
-        - FlipGreaterRule implements the default rules of the game. Newly placed cards with
-          greater values overtake old cards and vice versa if the game is reversed.
-        - PlusRule implements a rule where cards are flipped if at least two opposing pairs of
-          adjacent cards have the same sum with the current card in their respective opposing
-          directions. Reversing this rule does nothing, since there is nothing to reverse (it
-          would allow ALL cards to flip except those with an opposing sum of 10, which would
-          ruin the flow of the game)
-        - ReverseRule implements the reverse of the original rules. It acts functionally
-          identically to FlipGreater, but instanceof is used to notify the model that
-          the reverseSatisfiesFlip method is being used.
-        - SameRule implements a new rule where cards with the same opposing values as
-          the card played are flip IFF at least 2 cards satisfy this condition. The reverse
-          acts functionally the same as the non-reversed version.
